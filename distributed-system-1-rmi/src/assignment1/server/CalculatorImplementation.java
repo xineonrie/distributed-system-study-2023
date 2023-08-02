@@ -5,16 +5,13 @@ import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.Stack;
 
-
 public class CalculatorImplementation implements Calculator {
     public Stack<Integer> centralStack = new Stack<Integer>();
 
-    @Override
     public void pushValue(int val) throws RemoteException {
         this.centralStack.push(val);
     }
 
-    @Override
     public void pushOperation(String operator) throws RemoteException {
         // pop all the elements to stackArr.
         Integer[] stackArr = new Integer[this.centralStack.size()];
@@ -59,7 +56,7 @@ public class CalculatorImplementation implements Calculator {
             this.centralStack.push(gcdRes);
 
         } else {
-            throw new UnsupportedOperationException("Server error: Invalid operator for pushOperation");
+            throw new UnsupportedOperationException("Invalid operator for method pushOperation");
         }
 
         return;
@@ -72,7 +69,6 @@ public class CalculatorImplementation implements Calculator {
         return gcd(y,x%y);
     }
 
-    @Override
     public int pop() throws RemoteException {
         int res = this.centralStack.peek();
         this.centralStack.pop();
@@ -80,12 +76,10 @@ public class CalculatorImplementation implements Calculator {
         return res;
     }
 
-    @Override
     public boolean isEmpty() throws RemoteException {
         return this.centralStack.empty();
     }
 
-    @Override
     public int delayPop(int millis) throws RemoteException {
         int res = this.centralStack.peek();
         Thread.currentThread();
