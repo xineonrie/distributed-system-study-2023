@@ -7,6 +7,9 @@ import java.util.Stack;
 
 public class CalculatorImplementation implements Calculator {
     public Stack<Integer> centralStack = new Stack<Integer>();
+    public void Calculator() {
+        
+    }
 
     public void pushValue(int val) throws RemoteException {
          System.out.println("Pushvalue Success! now the top is : "+ val);
@@ -16,59 +19,57 @@ public class CalculatorImplementation implements Calculator {
 
     public void pushOperation(String operator) throws RemoteException {
         // pop all the elements to stackArr.
-        Integer[] stackArr = new Integer[this.centralStack.size()];
-        for(int i = 0; i < this.centralStack.size(); i++) {
+        int length = this.centralStack.size();
+        int[] stackArr = new int[length];
+        System.out.println("length of the stack: " + this.centralStack.size());
+        for(int i = 0; i < length; i++) {
             stackArr[i] = this.centralStack.peek();
+            System.out.println(stackArr[i]);
+
             this.centralStack.pop();
         }
+
         Arrays.sort(stackArr);
-        if(operator == "min") {
+        if(operator.equals("min")) {
             // for min - push the min value of all the popped values;
             this.centralStack.push(stackArr[0]);
-        } else if(operator == "max") {
-            // for max - push the max value of all the popped values
-            this.centralStack.push(stackArr[this.centralStack.size()-1]);
-        } else if(operator == "lcm") {
-            // for lcm - push the least common multiple of all the popped values;
-            int min, max, temp, res = 0;
-           
-            for(int i = 0; i<stackArr.length; i++) {
-               for(int j = i+1; j<stackArr.length-1; j++) {
-                  if(stackArr[i] > stackArr[j]) {
-                     min = stackArr[j];
-                     max = stackArr[i];
-                  } else {
-                     min = stackArr[i];
-                     max = stackArr[j];
-                  }
-                  for(int k =0; k<stackArr.length; k++) {
-                     temp = k * max;
-                     if(temp % min == 0) {
-                        res = temp ;
-                     }
-                  }
-               }
-            }
+            System.out.println("min val: " + this.centralStack.peek());
 
+        } else if(operator.equals("max")) {
+            // for max - push the max value of all the popped values
+            this.centralStack.push(stackArr[length-1]);
+        } else if(operator.equals("lcm")) {
+            // for lcm - push the least common multiple of all the popped values;
+            int res = stackArr[0];
+            for (int i = 1; i < length; i++)
+                res = lcm(res, stackArr[i]);
+            
             this.centralStack.push(res);
 
-        } else if(operator == "gcd") {
+        } else if(operator.equals("gcd")) {
             // for gcd - push the greatest common divisor of all the popped values.
-            int gcdRes = gcd(stackArr[0], stackArr[this.centralStack.size()-1]);
+            int gcdRes = gcd(stackArr[0], stackArr[length-1]);
             this.centralStack.push(gcdRes);
 
         } else {
-            throw new UnsupportedOperationException("Invalid operator for method pushOperation");
+            throw new UnsupportedOperationException("Invalid operator for method pushOperation: " + operator);
         }
 
         return;
     }
 
     private int gcd(int x, int y) {
-        if(y==0){
+        if(y == 0){
             return x;
         }
         return gcd(y,x%y);
+    }
+    
+    private int lcm(int x, int y) {
+        if(x == 0) {
+            return 0;
+        }
+        return (x / gcd(x, y)) * y;
     }
 
     public int pop() throws RemoteException {

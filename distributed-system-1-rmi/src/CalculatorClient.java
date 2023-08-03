@@ -10,13 +10,13 @@ public class CalculatorClient {
 
             Calculator obj1 = (Calculator) registry.lookup("Cal1");
             obj1.pushValue(2);
-            obj1.pushValue(34);
-            System.out.println("Now Time" + System.currentTimeMillis());
-            int val = obj1.delayPop(3000);
-            System.out.println("Pop Time: " + System.currentTimeMillis() + "\n Pop Val: " + val);
+            obj1.pushValue(6);
+            obj1.pushValue(18);
+            obj1.pushOperation("lcm");
+            int minVal = obj1.pop();
+            System.out.println("test lcm: " + minVal);
             
         } catch (Exception e) {
-            // TODO: handle exception
             System.out.println("Client error: " + e);
         }
     }
