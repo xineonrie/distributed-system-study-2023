@@ -1,4 +1,4 @@
-package assignment1.server;
+
 
 import java.rmi.RemoteException;
 
@@ -9,7 +9,9 @@ public class CalculatorImplementation implements Calculator {
     public Stack<Integer> centralStack = new Stack<Integer>();
 
     public void pushValue(int val) throws RemoteException {
+         System.out.println("Pushvalue Success! now the top is : "+ val);
         this.centralStack.push(val);
+        return;
     }
 
     public void pushOperation(String operator) throws RemoteException {
@@ -70,10 +72,16 @@ public class CalculatorImplementation implements Calculator {
     }
 
     public int pop() throws RemoteException {
-        int res = this.centralStack.peek();
-        this.centralStack.pop();
+        if(!this.centralStack.empty()) {
+            int res = this.centralStack.peek();
+            this.centralStack.pop();
 
-        return res;
+            return res;
+        } else {
+            throw new UnsupportedOperationException("The current stack is empty, it's not possible to pop any elements.");
+
+        }
+        
     }
 
     public boolean isEmpty() throws RemoteException {
@@ -86,10 +94,14 @@ public class CalculatorImplementation implements Calculator {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.out.println("Client error: " + e);
         } 
-        this.centralStack.pop();
+        if(!this.centralStack.empty()) {
+            this.centralStack.pop();
+        } else {
+            throw new UnsupportedOperationException("The current stack is empty, it's not possible to pop any elements.");
+
+        }
 
         return res;
     }
